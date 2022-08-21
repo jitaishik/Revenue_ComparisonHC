@@ -170,7 +170,7 @@ class HandlerTriplets():
         i = self.comparisons.row
         j,k = self._get_ij(self.comparisons.col)
 
-        tSTE_comparisons = np.zeros((self.n_quadruplets,3),dtype=int)
+        tSTE_comparisons = np.zeros((len(i),3),dtype=int)
 
         tSTE_comparisons[:,0] = i
         tSTE_comparisons[:,1] = (self.comparisons.data == 1)*j + (self.comparisons.data == -1)*k

@@ -149,11 +149,27 @@ def tSTE(triplets, n, no_triplets, no_dims=2, lbda=0, alpha=None, use_log=True):
     return best_X
 
 def get_tSTE_triplets(oracle,n_examples):
-  X = tSTE(oracle.get_tSTE_comparisons(),n_examples,oracle.get_tSTE_comparisons().shape[0])
+    """Returns a symmetric similarity matrix representing the similarities
+    between all the examples using the MulK triplets approach.
+    Parameters
+    ----------
+    triplets : standard triplets
+    
+    n : int
+        The number of objects.
+        
+    n_trilets : int
+        The number of triplets.
+    Returns
+    -------
+    kernel : numpy array, shape (n_examples,n_examples)
+        A nummpy array of similarities between the examples.
+    """
+    X = tSTE(oracle.get_tSTE_comparisons(),n_examples,oracle.get_tSTE_comparisons().shape[0])
 
-  kernel = sklearn.metrics.pairwise.cosine_similarity(X, dense_output=True)
+    kernel = sklearn.metrics.pairwise.cosine_similarity(X, dense_output=True)
 
-  return kernel
+    return kernel
 
 def get_AddS_quadruplets(oracle,n_examples):
     """Returns a symmetric similarity matrix representing the similarities
