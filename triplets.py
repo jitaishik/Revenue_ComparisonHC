@@ -1,9 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import time
-import random as rd
-import sklearn.metrics
-import itertools
 from tqdm import tqdm
 import argparse
 from comparisonHC import HandlerTriplets, OracleTriplets, get_AddS_triplets, get_MulK_triplets, get_tSTE_triplets, ComparisonHC
@@ -30,20 +25,12 @@ if __name__ == '__main__':
     clusters, dendrogram_truth, similarities = planted_model(n_examples_pure=args.n_examples_pure,levels=args.levels,mu=args.mean,delta=args.delta,sigma=args.sigma)
 
     n = similarities.shape[0]
-    # plt.figure()
-    # plt.imshow(similarities)
-    # plt.show()
-
     map = np.random.permutation(n)
 
     similarities_random = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
             similarities_random[map[i]][map[j]] = similarities[i][j]
-
-    # plt.figure()
-    # plt.imshow(similarities_random)
-    # plt.show()
 
     clusters_random = []
     for cluster in clusters:
@@ -65,7 +52,6 @@ if __name__ == '__main__':
         chc = ComparisonHC(adds_similarities,n)
         chc.fit([[j] for j in range(n)])
 
-        # print("ComparisonHC ran for {:.2f} seconds.".format(chc.time_elapsed))
         score_chc = chc.average_ARI(args.levels,dendrogram_truth,clusters_random)
         adds3_ari.append(score_chc)
         adds3_rev.append(-chc.cost_dasgupta(adds_similarities))
@@ -74,7 +60,6 @@ if __name__ == '__main__':
         chc_tste = ComparisonHC(tste_similarities,n)
         chc_tste.fit([[j] for j in range(n)])
 
-        # print("ComparisonHC ran for {:.2f} seconds.".format(chc_tste.time_elapsed))
         score_chc_tste = chc_tste.average_ARI(args.levels,dendrogram_truth,clusters_random)
         tste_ari.append(score_chc_tste)
         tste_rev.append(-chc_tste.cost_dasgupta(adds_similarities))
@@ -83,7 +68,6 @@ if __name__ == '__main__':
         chc_mulk = ComparisonHC(mulk_similarities,n)
         chc_mulk.fit([[j] for j in range(n)])
 
-        # print("ComparisonHC ran for {:.2f} seconds.".format(chc_mulk.time_elapsed))
         score_chc_mulk = chc_mulk.average_ARI(args.levels,dendrogram_truth,clusters_random)
         mulk_ari.append(score_chc_mulk)
         mulk_rev.append(-chc_mulk.cost_dasgupta(adds_similarities))

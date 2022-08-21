@@ -1,9 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
-import time
-import random as rd
-import sklearn.metrics
-import itertools
 from tqdm import tqdm
 import argparse
 from comparisonHC import HandlerQuadruplets, OracleQuadruplets, get_AddS_quadruplets, get_MulK_quadruplets, ComparisonHC
@@ -31,20 +26,12 @@ if __name__ == '__main__':
     
     n = similarities.shape[0]
 
-    # plt.figure()
-    # plt.imshow(similarities)
-    # plt.show()
-
     map = np.random.permutation(n)
 
     similarities_random = np.zeros((n,n))
     for i in range(n):
         for j in range(n):
             similarities_random[map[i]][map[j]] = similarities[i][j]
-
-    # plt.figure()
-    # plt.imshow(similarities_random)
-    # plt.show()
 
     clusters_random = []
     for cluster in clusters:
