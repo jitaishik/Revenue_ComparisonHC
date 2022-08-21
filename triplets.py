@@ -7,14 +7,14 @@ from utils import planted_model
 def cmdline_args():
     # Make parser object
     p = argparse.ArgumentParser()
-    p.add_argument("-n", "--n_examples_pure", type=int, default=30, help="")
-    p.add_argument("-l", "--levels", type=int, default=3, help="")
-    p.add_argument("-mu", "--mean", type=float, default=0.8, help="")
-    p.add_argument("-del", "--delta", type=float, default=0.02, help="")
-    p.add_argument("-sig", "--sigma", type=float, default=0.1, help="")
-    p.add_argument("-r", "--runs", type=int, default=10, help="")
-    p.add_argument("-k", "--proportion", type=float, default=1, help="")
-    p.add_argument("-noise", "--proportion_noise", type=float, default=0, help="")
+    p.add_argument("-n", "--n_examples_pure", type=int, default=30, help="number of objects in synthetic data")
+    p.add_argument("-l", "--levels", type=int, default=3, help="number of levels of the tree")
+    p.add_argument("-mu", "--mean", type=float, default=0.8, help="mean of the distribution from where the data is sampled")
+    p.add_argument("-del", "--delta", type=float, default=0.02, help="amount of perturbation")
+    p.add_argument("-sig", "--sigma", type=float, default=0.1, help="variance of the distribution from where the data is sampled")
+    p.add_argument("-r", "--runs", type=int, default=10, help="number of times each algorithm is run")
+    p.add_argument("-k", "--proportion", type=float, default=1, help="number or proportion of quadruplets considered")
+    p.add_argument("-noise", "--proportion_noise", type=float, default=0, help="proportion of noisy data")
 
     return (p.parse_args())
 
