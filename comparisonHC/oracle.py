@@ -178,6 +178,43 @@ class HandlerTriplets():
         
         return tSTE_comparisons
 
+class ListTriplets(HandlerTriplets):
+    """A data handler that can return triplets in several forms given a
+    list of triplets.
+    
+    Parameters
+    ----------
+    list_comparisons : numpy array, shape (n_comparisons, 3)
+        A numpy array where each row indicates that the triplet
+        (row[0],row[1],row[2]) is available.
+    n_examples : int
+        The number of examples handled.
+    n_comparsions : int
+        The number of unique triplets handled.
+    Attributes 
+    ---------- 
+    comparisons : scipy coo matrix, shape (n_examples, (n_examples choose 2))
+        A scipy coo_matrix containing values in {1,-1,0}. Given
+        i!=j,k, j<k, in entry (i,self._get_k(j,k)), the value 1
+        indicates that the triplet (i,j,k) is available, the value -1
+        indicates that the triplet (i,k,j) is available, and the value
+        0 indicates that neither of the triplets is available.
+    n_examples : int
+        The number of examples handled.
+    n_comparisons : int
+        The number of comparisons handled.
+    """
+    def __init__(self, list_comparisons, n_examples, n_comparisons):
+        self.n_examples = n_examples
+
+        columns = self._get_k(np.amin(list_comparisons[:,1:],axis=1),np.amax(list_comparisons[:,1:],axis=1))
+        entries = np.where(list_comparisons[:,1] < list_comparisons[:,2], 1, -1)
+        
+        comparisons = coo_matrix((entries,(list_comparisons[:,0],columns)),shape=(n_examples,(n_examples*(n_examples-1))//2),dtype=int)
+        comparisons.eliminate_zeros()
+
+        super(ListTriplets,self).__init__(comparisons, n_comparisons, n_examples)
+
 class OracleTriplets(HandlerTriplets):
     """An oracle that returns passively queried triplets given a
     similarity matrix.
@@ -419,6 +456,49 @@ class HandlerQuadruplets():
         AddS_comparisons = self.comparisons.tocsr()
         
         return AddS_comparisons
+
+class ListQuadruplets(HandlerQuadruplets):
+    
+    """A data handler that can return quadruplets in several forms given a
+    list of quadruplets.
+    
+    Parameters
+    ----------
+    list_comparisons : numpy array, shape (n_comparisons, 4)
+        A numpy array where each row indicates that the quadruplet
+        (row[0],row[1],row[2],row[3]) is available.
+    n_examples : int
+        The number of examples handled.
+    n_comparsions : int
+        The number of unique quadruplets handled.
+    Attributes 
+    ---------- 
+    comparisons : scipy coo matrix, shape ((n_examples choose 2), (n_examples choose 2))
+        A scipy coo_matrix containing values in {1,-1,0}. Given i<j,
+        k<l, in entry (self._get_k(i,j),self._get_k(k,l)), the value 1
+        indicates that the quadruplet (i,j,k,l) is available, the
+        value -1 indicates that the quadruplet (k,l,i,j) is available,
+        and the value 0 indicates that neither of the quadruplets is
+        available.
+    n_examples : int
+        The number of examples handled.
+    n_comparisons : int
+        The number of comparisons handled.
+    """
+    def __init__(self, list_comparisons, n_examples, n_comparisons):
+        self.n_examples = n_examples
+
+        n_entries = (n_examples*(n_examples-1))//2
+        
+        rows = self._get_k(np.amin(list_comparisons[:,:2],axis=1),np.amax(list_comparisons[:,:2],axis=1))
+        columns = self._get_k(np.amin(list_comparisons[:,2:],axis=1),np.amax(list_comparisons[:,2:],axis=1))
+        entries = np.ones((n_comparisons,))
+
+        # We also populate the lower triangular part of the matrix for convenience reasons
+        comparisons = coo_matrix((np.concatenate((entries,-entries)),(np.concatenate((rows,columns)),np.concatenate((columns,rows)))),shape=(n_entries,n_entries),dtype=int)
+        comparisons.eliminate_zeros()
+
+        super(ListQuadruplets,self).__init__(comparisons, n_comparisons, n_examples)
 
 class OracleQuadruplets(HandlerQuadruplets):
 
