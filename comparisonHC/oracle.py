@@ -552,8 +552,6 @@ class OracleQuadruplets(HandlerQuadruplets):
         self.n_examples = n_examples
         
         self.proportion_noise = proportion_noise
-
-#        self.normalisation = np.zeros((n_examples,n_examples),dtype=int)
         
         if seed is not None:
             self.seed = seed
