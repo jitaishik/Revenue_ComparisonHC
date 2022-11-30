@@ -4,7 +4,23 @@ This is a python implementation of revenue function of comparison-based hierarch
 ## Citing Revenue_ComparisonHC
 If you use this software please cite the following publication:
 ```
-
+@misc{https://doi.org/10.48550/arxiv.2211.16459,
+  doi = {10.48550/ARXIV.2211.16459},
+  
+  url = {https://arxiv.org/abs/2211.16459},
+  
+  author = {Mandal, Aishik and Perrot, Michaël and Ghoshdastidar, Debarghya},
+  
+  keywords = {Machine Learning (cs.LG), Machine Learning (stat.ML), FOS: Computer and information sciences, FOS: Computer and information sciences},
+  
+  title = {A Revenue Function for Comparison-Based Hierarchical Clustering},
+  
+  publisher = {arXiv},
+  
+  year = {2022},
+  
+  copyright = {arXiv.org perpetual, non-exclusive license}
+}
 ```
 
 ## Installation
