@@ -22,8 +22,8 @@ def cmdline_args():
 if __name__ == '__main__':
 
     args = cmdline_args()
+    np.random.seed(0)
     clusters, dendrogram_truth, similarities = planted_model(n_examples_pure=args.n_examples_pure,levels=args.levels,mu=args.mean,delta=args.delta,sigma=args.sigma)
-    
     n = similarities.shape[0]
 
     map = np.random.permutation(n)
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     al4k_rev = []
 
     for i in tqdm(range(args.runs)):
-        Oracle = OracleQuadruplets(similarities_random,n,n_quadruplets=int(2*n*n),proportion_noise=0.05)
+        Oracle = OracleQuadruplets(similarities_random,n,n_quadruplets=int(2*n*n),proportion_noise=args.proportion_noise,seed=i)
         adds_similarities = get_AddS_quadruplets(Oracle,n)
         chc = ComparisonHC(adds_similarities,n)
         chc.fit([[j] for j in range(n)])
@@ -84,12 +84,12 @@ if __name__ == '__main__':
     al4k_rev_std = np.std(al4k_rev)
 
     print("The results over ",args.runs," runs is:")
-    print("\t Mean of AARI using AddS-4: ",adds4_ari_mean)
-    print("\t Standard Deviation of AARI using AddS-4: ",adds4_ari_std)
-    print("\t Mean of Revenue using AddS-4: ",adds4_rev_mean)
-    print("\t Standard Deviation of Revenue using AddS-4: ",adds4_rev_std)
+    print("\t Mean of AARI using AddS-4: ","{:.3e}".format(adds4_ari_mean))
+    print("\t Standard Deviation of AARI using AddS-4: ","{:.3e}".format(adds4_ari_std))
+    print("\t Mean of Revenue using AddS-4: ","{:.3e}".format(adds4_rev_mean))
+    print("\t Standard Deviation of Revenue using AddS-4: ","{:.3e}".format(adds4_rev_std))
     print("\n \n")
-    print("\t Mean of AARI using 4K-AL: ",al4k_ari_mean)
-    print("\t Standard Deviation of AARI using 4K-AL: ",al4k_ari_std)
-    print("\t Mean of Revenue using 4K-AL: ",al4k_rev_mean)
-    print("\t Standard Deviation of Revenue using 4K-AL: ",al4k_rev_std)
+    print("\t Mean of AARI using 4K-AL: ","{:.3e}".format(al4k_ari_mean))
+    print("\t Standard Deviation of AARI using 4K-AL: ","{:.3e}".format(al4k_ari_std))
+    print("\t Mean of Revenue using 4K-AL: ","{:.3e}".format(al4k_rev_mean))
+    print("\t Standard Deviation of Revenue using 4K-AL: ","{:.3e}".format(al4k_rev_std))

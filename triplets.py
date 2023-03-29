@@ -10,11 +10,11 @@ def cmdline_args():
     p.add_argument("-n", "--n_examples_pure", type=int, default=30, help="number of objects in synthetic data")
     p.add_argument("-l", "--levels", type=int, default=3, help="number of levels of the tree")
     p.add_argument("-mu", "--mean", type=float, default=0.8, help="mean of the distribution from where the data is sampled")
-    p.add_argument("-del", "--delta", type=float, default=0.02, help="amount of perturbation")
+    p.add_argument("-del", "--delta", type=float, default=0.15, help="amount of perturbation")
     p.add_argument("-sig", "--sigma", type=float, default=0.1, help="variance of the distribution from where the data is sampled")
     p.add_argument("-r", "--runs", type=int, default=10, help="number of times each algorithm is run")
     p.add_argument("-k", "--proportion", type=float, default=1, help="number or proportion of quadruplets considered")
-    p.add_argument("-noise", "--proportion_noise", type=float, default=0, help="proportion of noisy data")
+    p.add_argument("-noise", "--proportion_noise", type=float, default=0.0, help="proportion of noisy data")
 
     return (p.parse_args())
 
@@ -22,8 +22,8 @@ def cmdline_args():
 if __name__ == '__main__':
 
     args = cmdline_args()
+    np.random.seed(0)
     clusters, dendrogram_truth, similarities = planted_model(n_examples_pure=args.n_examples_pure,levels=args.levels,mu=args.mean,delta=args.delta,sigma=args.sigma)
-
     n = similarities.shape[0]
     map = np.random.permutation(n)
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
     mulk_rev = []
 
     for i in tqdm(range(args.runs)):
-        Oracle = OracleTriplets(similarities_random,n,n_triplets=int((args.proportion)*n*n),proportion_noise=args.proportion_noise)
+        Oracle = OracleTriplets(similarities_random,n,n_triplets=int((args.proportion)*n*n),proportion_noise=args.proportion_noise,seed=i)
         adds_similarities = get_AddS_triplets(Oracle,n)
         chc = ComparisonHC(adds_similarities,n)
         chc.fit([[j] for j in range(n)])
@@ -97,17 +97,17 @@ if __name__ == '__main__':
     mulk_rev_std = np.std(mulk_rev)
 
     print("The results over ",args.runs," runs is:")
-    print("\t Mean of AARI using AddS-3: ",adds3_ari_mean)
-    print("\t Standard Deviation of AARI using AddS-3: ",adds3_ari_std)
-    print("\t Mean of Revenue using AddS-3: ",adds3_rev_mean)
-    print("\t Standard Deviation of Revenue using AddS-3: ",adds3_rev_std)
+    print("\t Mean of AARI using AddS-3: ","{:.3e}".format(adds3_ari_mean))
+    print("\t Standard Deviation of AARI using AddS-3: ","{:.3e}".format(adds3_ari_std))
+    print("\t Mean of Revenue using AddS-3: ","{:.3e}".format(adds3_rev_mean))
+    print("\t Standard Deviation of Revenue using AddS-3: ","{:.3e}".format(adds3_rev_std))
     print("\n \n")
-    print("\t Mean of AARI using t-STE: ",tste_ari_mean)
-    print("\t Standard Deviation of AARI using t-STE: ",tste_ari_std)
-    print("\t Mean of Revenue using t-STE: ",tste_rev_mean)
-    print("\t Standard Deviation of Revenue using t-STE: ",tste_rev_std)
+    print("\t Mean of AARI using t-STE: ","{:.3e}".format(tste_ari_mean))
+    print("\t Standard Deviation of AARI using t-STE: ","{:.3e}".format(tste_ari_std))
+    print("\t Mean of Revenue using t-STE: ","{:.3e}".format(tste_rev_mean))
+    print("\t Standard Deviation of Revenue using t-STE: ","{:.3e}".format(tste_rev_std))
     print("\n \n")
-    print("\t Mean of AARI using MulK-3: ",mulk_ari_mean)
-    print("\t Standard Deviation of AARI using MulK-3: ",mulk_ari_std)
-    print("\t Mean of Revenue using MulK-3: ",mulk_rev_mean)
-    print("\t Standard Deviation of Revenue using MulK-3: ",mulk_rev_std)
+    print("\t Mean of AARI using MulK-3: ","{:.3e}".format(mulk_ari_mean))
+    print("\t Standard Deviation of AARI using MulK-3: ","{:.3e}".format(mulk_ari_std))
+    print("\t Mean of Revenue using MulK-3: ","{:.3e}".format(mulk_rev_mean))
+    print("\t Standard Deviation of Revenue using MulK-3: ","{:.3e}".format(mulk_rev_std))
