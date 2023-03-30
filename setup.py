@@ -22,11 +22,11 @@ setuptools.setup(
         "Topic :: Scientific/Engineering :: Artificial Intelligence",
     ],
     install_requires=[
-        "numpy>=1.22.4",
+        "numpy>=1.20.1",
         "scikit-learn>=1.1.1",
         "scipy>=1.8.1",
-        "tqdm>=4.62.3",
-        "argparse>=1.1"
+        "tqdm>=4.64.0",
+        "argparse>=1.4.0"
     ],
-    python_requires=">=3.9.7"
+    python_requires=">=3.9.1"
 )
